@@ -501,9 +501,5 @@ function drawLine(ctx, x1, y1, x2, y2) {
     ctx.lineTo(x2, y2);
 }
 
-//xWidth = prompt('Введите наибольшее по модулю значение координаты x', 160);
-//yWidth = prompt('Введите наибольшее по модулю значение координаты y', 90);
 width = prompt('Введите наибольшее допустимое значение модуля координаты', 100);
-//xWidth = window.innerWidth / (2 * ratio);
-//yWidth = window.innerHeight / (2 *ratio);
 initMain();
