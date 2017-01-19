@@ -43,7 +43,7 @@ function inputInit() {
     div.style = 'text-align: center; z-index:2';
     document.body.appendChild(div);
 
-    for (let i = 1; i<=3; i++){
+    for (let i = 1; i<=4; i++){
         let btn = document.createElement('button');
         switch(100 + i * 10) {
             case INPUT_BY_KEYBOARD:
@@ -53,8 +53,11 @@ function inputInit() {
                 btn.onclick = inputRandom;
                 break;
             case INPUT_FROM_FILE:
-                btn.onclick = inputFromFile;
+                btn.onclick = inputFromFile; //todo
                 break;
+            case INPUT_TESTS:
+                btn.onclick = initTests; //todo
+                break
         }
         btn.innerHTML = 'O';
         
@@ -158,15 +161,9 @@ function inputRandom() {
 };
 
 function inputFromFile(){
-    alert('Я ввожу из файла!');
-    document.body.removeChild(document.getElementById('general'));
-
-    let div = document.createElement('div');
-    div.id = 'general';
-    div.style = 'text-align: center; z-index:2';
-    document.body.appendChild(div);
-
-
+    alert('Эта функция будет добавлена в следующих обновлениях');
+    
+    initMain();
 };  
 
 function output(){
@@ -403,18 +400,24 @@ function task(ctx, div, canvas){
         }
     };
 
-    minCircumference.center.draw(ctx, canvas, 'red');
+    if (minCircumference !== undefined) {
 
-    minCircumference.draw(ctx, canvas, 'red');
+        minCircumference.center.draw(ctx, canvas, 'red');
+        minCircumference.draw(ctx, canvas, 'red');
 
 
-    let centerP = document.createElement('p');
-    centerP.innerHTML = 'Центр: x = ' + minCircumference.center.x + ' , y = ' + minCircumference.center.y;
-    let radiusP = document.createElement('p');
-    radiusP.innerHTML = 'Радиус r = ' + minCircumference.radius;
+        let centerP = document.createElement('p');
+        centerP.innerHTML = 'Центр: x = ' + minCircumference.center.x.toFixed(2) + ' , y = ' + minCircumference.center.y.toFixed(2);
+        let radiusP = document.createElement('p');
+        radiusP.innerHTML = 'Радиус r = ' + minCircumference.radius.toFixed(2);
 
-    div.appendChild(centerP);
-    div.appendChild(radiusP);
+        div.appendChild(centerP);
+        div.appendChild(radiusP);
+    } else {
+        let errorP = document.createElement('p');
+        errorP.innerHTML = 'Не существует ни одной окружности';
+        div.appendChild(errorP);
+    };   
 }; 
 
 function getCenterOfCircumscribedCircle (pA, pB, pC) {
@@ -490,6 +493,7 @@ function addReturnButton(div) {
     returnButton.innerHTML = 'О';
 
     let returnP = document.createElement('p');
+    returnP.style = 'text-align: center';
     returnP.innerHTML = 'Вернуться на главную';
 
     div.appendChild(returnP);
@@ -499,7 +503,83 @@ function addReturnButton(div) {
 function drawLine(ctx, x1, y1, x2, y2) {
     ctx.moveTo(x1, y1);
     ctx.lineTo(x2, y2);
-}
+};
+
+function initTests(){
+    document.body.removeChild(document.getElementById('general'));
+
+    let div = document.createElement('div');
+    div.id = 'general';
+    div.style = 'z-index:2';
+    document.body.appendChild(div);
+
+    addReturnButton(div);
+
+    test(TEST_ONE, div);
+    test(TEST_TWO, div);
+};
+
+function test(TEST_ARRAY, div) {
+    let table = document.createElement('table');
+    div.appendChild(table);
+    
+    let numH = document.createElement('th');
+    numH.innerHTML = '№ точки';
+    let xH = document.createElement('th');
+    xH.innerHTML = 'X координата';
+    let yH = document.createElement('th');
+    yH.innerHTML = 'Y координата';
+
+    let trH = document.createElement('tr');
+
+    trH.appendChild(numH);
+    trH.appendChild(xH);
+    trH.appendChild(yH);
+
+    table.appendChild(trH);
+    for (let i = 0; i < TEST_ARRAY.length; i++){
+        let tr = document.createElement('tr');
+        table.appendChild(tr);
+
+        let num = document.createElement('td');
+        num.innerHTML = (i + 1).toString();
+        num.style = 'border: 1px solid #000000; text-align: center;';
+        tr.appendChild(num);
+
+        let xD = document.createElement('td');
+        xD.style = 'border: 1px solid #000000;'
+        tr.appendChild(xD);
+        let xOutput = document.createElement('p');
+        xOutput.innerHTML = (TEST_ARRAY[i].x).toString();
+        xOutput.style = 'text-align: center;';
+        xD.appendChild(xOutput);
+
+        let yD = document.createElement('td');
+        yD.style = 'border: 1px solid #000000;'
+        tr.appendChild(yD);
+        let yOutput = document.createElement('p');
+        yOutput.innerHTML = (TEST_ARRAY[i].y).toString();
+        yOutput.style = 'text-align: center;';
+        yD.appendChild(yOutput);
+    }
+
+    let addButton = document.createElement('button');
+    addButton.onclick = confirmPreset.bind(this, TEST_ARRAY);
+    addButton.innerHTML = 'О';
+
+    let addP = document.createElement('p');
+    addP.innerHTML = 'Применить';
+
+    div.appendChild(addP);
+    addP.appendChild(addButton);
+
+
+};
+
+function confirmPreset(preset) {
+    POINTS = preset;
+    n = preset.length;
+};
 
 width = prompt('Введите наибольшее допустимое значение модуля координаты', 100);
 initMain();
